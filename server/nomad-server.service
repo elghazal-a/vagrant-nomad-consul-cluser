@@ -1,0 +1,15 @@
+[Unit]
+Description=nomad server
+Requires=consul.service
+After=consul.service
+ConditionPathExists=/etc/nomad.d/server.hcl
+
+[Service]
+EnvironmentFile=-/etc/environment
+Restart=on-failure
+ExecStart=/usr/bin/nomad agent -config=/etc/nomad.d/server.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
